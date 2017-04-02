@@ -4,14 +4,20 @@ class TweetsController < ApplicationController
 
   def index
     @tweets = Tweet.includes(:user).order("created_at DESC").page(params[:page]).per(5)
-    @mentor_test = 'mentor_test'
   end
 
   def new
   end
 
   def create
-    Tweet.create(nimage: tweet_params[:image], text: tweet_params[:text], user_id: current_user.id)
+    Tweet.create(image: tweet_params[:image], text: tweet_params[:text], user_id: current_user.id)
+  end
+
+  def destroy
+    tweet = Tweet.find(params[:id])
+    if tweet.user_id == current_user.id
+      tweet.destroy
+    end
   end
 
   private
